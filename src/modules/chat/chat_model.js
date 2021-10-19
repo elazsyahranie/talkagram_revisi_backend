@@ -28,5 +28,36 @@ module.exports = {
         }
       )
     })
+  },
+  changeChat: (newChat, id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE chat SET ? WHERE chat_id = ?',
+        [newChat, id],
+        (error, result) => {
+          if (!error) {
+            console.log(result)
+            const newResult = {
+              id: id,
+              ...newChat
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
+  deleteChat: (id) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'DELETE FROM chat WHERE chat_id = ?',
+        id,
+        (error, result) => {
+          !error ? resolve(result) : reject(new Error(error))
+        }
+      )
+    })
   }
 }
