@@ -9,21 +9,9 @@ const compression = require('compression')
 const bodyParser = require('body-parser')
 const routerNavigation = require('./routes')
 const socket = require('socket.io')
-const redis = require('redis')
 
 const app = express()
 const port = process.env.PORT
-
-const client = redis.createClient({
-  host: process.env.REDIS_HOSTNAME,
-  port: process.env.REDIS_PORT,
-  password: process.env.REDIS_PASSWORD
-})
-
-client.on('connect', () => {
-  console.log('Connected to our redis instance!')
-  client.set('Greatest Basketball Player', 'Lebron James')
-})
 
 app.use(morgan('dev'))
 app.use(cors())
