@@ -1,10 +1,6 @@
 const redis = require('redis')
 const client = redis.createClient()
 
-client.on('connect', () => {
-  console.log('Connected to our redis instance!')
-  client.set('Greatest Basketball Player', 'Lebron James')
-})
 const helper = require('../helpers/wrapper')
 // const helperUser = require('../helpers/wrapperUser')
 
