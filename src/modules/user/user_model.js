@@ -37,7 +37,7 @@ module.exports = {
   findRoomList: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
-        `SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id WHERE room_chat.user_id = ${id}`,
+        `SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id JOIN last_chat ON room_chat.room_chat = last_chat.room_chat WHERE room_chat.user_id = ${id};`,
         (error, result) => {
           !error ? resolve(result) : reject(new Error(result))
         }
