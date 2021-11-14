@@ -49,6 +49,26 @@ module.exports = {
       )
     })
   },
+  changeLastChat: (newChat, roomChat) => {
+    return new Promise((resolve, reject) => {
+      connection.query(
+        'UPDATE last_chat SET ? WHERE room_chat = ?',
+        [newChat, roomChat],
+        (error, result) => {
+          if (!error) {
+            console.log(result)
+            const newResult = {
+              roomChat: roomChat,
+              ...newChat
+            }
+            resolve(newResult)
+          } else {
+            reject(new Error(error))
+          }
+        }
+      )
+    })
+  },
   deleteChat: (id) => {
     return new Promise((resolve, reject) => {
       connection.query(
