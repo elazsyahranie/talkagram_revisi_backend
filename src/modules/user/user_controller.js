@@ -2,8 +2,8 @@
 const helper = require('../../helpers/wrapper')
 const helperUser = require('../../helpers/wrapperUser')
 const bcrypt = require('bcrypt')
-const redis = require('redis')
-const client = redis.createClient()
+// const redis = require('redis')
+// const client = redis.createClient()
 
 const userModel = require('./user_model')
 require('dotenv').config()
