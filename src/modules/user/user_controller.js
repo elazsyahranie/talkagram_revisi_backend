@@ -294,13 +294,7 @@ module.exports = {
         if (checkUser[0].user_verification === 0) {
           return helper.response(res, 403, 'Account is not verified')
         }
-
-        const checkPassword = bcrypt.compareSync(
-          userPassword,
-          checkUser[0].user_password
-        )
-
-        if (checkPassword) {
+        
           const salt = bcrypt.genSaltSync(10)
           const encryptPassword = bcrypt.hashSync(userNewPassword, salt)
           const setData = {
@@ -313,13 +307,32 @@ module.exports = {
             `Change password success! User ID - ${id}`,
             result
           )
-        } else {
-          return helper.response(
-            res,
-            400,
-            'You entered the previous password wrong!'
-          )
-        }
+
+        // const checkPassword = bcrypt.compareSync(
+        //   userPassword,
+        //   checkUser[0].user_password
+        // )
+
+        // if (checkPassword) {
+        //   const salt = bcrypt.genSaltSync(10)
+        //   const encryptPassword = bcrypt.hashSync(userNewPassword, salt)
+        //   const setData = {
+        //     user_password: encryptPassword
+        //   }
+        //   const result = await userModel.updateData(setData, id)
+        //   return helper.response(
+        //     res,
+        //     200,
+        //     `Change password success! User ID - ${id}`,
+        //     result
+        //   )
+        // } else {
+        //   return helper.response(
+        //     res,
+        //     400,
+        //     'You entered the previous password wrong!'
+        //   )
+        // }
       }
     } catch (error) {
       console.log(error)
