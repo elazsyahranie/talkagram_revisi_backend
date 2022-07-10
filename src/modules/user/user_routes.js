@@ -3,15 +3,6 @@ const Route = express.Router()
 const uploads = require('../../middleware/uploads')
 const { authentication } = require('../../middleware/auth')
 
-// const {
-//   getUserByIdRedis,
-//   getUserSearchKeywordRedis,
-//   getContactsRedis,
-//   getContactsDataOnlyRedis,
-//   clearDataUserRedis,
-//   clearDataContactsRedis
-// } = require('../../middleware/redis')
-
 const {
   getAllUser,
   getUsernameSearchKeyword,
