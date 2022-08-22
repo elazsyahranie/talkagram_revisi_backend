@@ -223,10 +223,14 @@ module.exports = {
       const { id } = req.params
       let { page, limit, sort, search } = req.query
 
+      console.log(`This is ID - ${id}`)
+
       page = page ? parseInt(page) : 1
       limit = limit ? parseInt(limit) : 5
       sort = sort ? sort : 'contact.contact_user_id ASC'
-      search = search ? search : ''
+      search = search ? search : id
+
+      console.log(`This is search - ${search}`)
 
       const totalData = await userModel.getDataCount(search)
       const totalPage = Math.ceil(totalData / limit)
@@ -245,8 +249,8 @@ module.exports = {
         sort,
         search
       )
-      console.log(totalData)
-      console.log(limit)
+      console.log(`This is total Data - ${totalData}`)
+      // console.log(limit)
       return helper.response(
         res,
         200,
