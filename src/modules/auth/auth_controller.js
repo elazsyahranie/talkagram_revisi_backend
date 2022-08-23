@@ -58,7 +58,6 @@ module.exports = {
   },
   login: async (req, res) => {
     try {
-      // console.log(req.body)
       const { userEmail, userPassword } = req.body
       const checkUserEmail = await authModel.getDataConditions({
         user_email: userEmail
@@ -80,14 +79,14 @@ module.exports = {
           delete payload.user_password
           delete payload.user_pin
           const token = jwt.sign({ ...payload }, process.env.PRIVATE_KEY, {
-            expiresIn: '1h'
+            expiresIn: '24h'
           })
           const refreshToken = jwt.sign(
             { ...payload },
             process.env.PRIVATE_KEY,
-            {
-              expiresIn: '24h'
-            }
+            // {
+            //   expiresIn: '24h'
+            // }
           )
           // Memasukkan data checkUserEmail ke dalam refreshToken
           dataRefreshToken[checkUserEmail[0].user_id] = refreshToken
@@ -108,15 +107,15 @@ module.exports = {
       const { refreshToken } = req.body
       // Jika userId pada dataRefreshToken
       // Apa refreshToken masih bisa dipakai?
-      console.log(refreshToken)
+      // console.log(refreshToken)
       jwt.verify(refreshToken, process.env.PRIVATE_KEY, (error, result) => {
         if (
           (error && error.name === 'JsonWebTokenError') ||
           (error && error.name === 'TokenExpiredError')
         ) {
-          // Jika refreshToken tidak bisa dipakai lagi
+          // Jika refreshToken tidak bisa dipakai lagi 
+          /* Coba di sini ditaruh logic untuk generate refreshToken nya */
           delete dataRefreshToken.user_id
-          console.log(refreshToken)
           return helper.response(res, 403, error.message)
         } else {
           if (

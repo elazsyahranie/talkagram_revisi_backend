@@ -188,7 +188,7 @@ module.exports = {
     try {
       const { id } = req.params
       const result = await userModel.getContactData({ contact_user_id: id })
-      client.setex(`getcontacts:${id}`, 3600, JSON.stringify(result))
+      // client.setex(`getcontacts:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(res, 200, 'Succes get contacts data', result)
       } else {
@@ -202,7 +202,7 @@ module.exports = {
     try {
       const { id } = req.params
       const result = await userModel.getContactDataOnly(id)
-      client.setex(`getcontactsdataonly:${id}`, 3600, JSON.stringify(result))
+      // client.setex(`getcontactsdataonly:${id}`, 3600, JSON.stringify(result))
       if (result.length > 0) {
         return helper.response(
           res,
