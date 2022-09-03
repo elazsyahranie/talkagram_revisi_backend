@@ -1,3 +1,4 @@
+const db = require('../../config/mysql')
 const connection = require('../../config/mysql')
 
 module.exports = {
@@ -36,12 +37,26 @@ module.exports = {
   // SELECT * FROM user JOIN balance ON user.user_id = balance.user_id WHERE user.user_id = ${id}
   findRoomList: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id JOIN last_chat ON room_chat.room_chat = last_chat.room_chat WHERE room_chat.user_id = ${id};`,
+      db.all(
+        'SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id JOIN last_chat ON room_chat.room_chat = last_chat.room_chat WHERE room_chat.user_id = ?;',
+        [id],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(result))
         }
       )
+    })
+  },
+  findRoomListByUserId: (id) => {
+    return new Promise((resolve, reject) => {
+      let query = 'SELECT '
+      query += 'room_chat.room_chat, room_chat.room_chat_id, '
+      query += 'room_chat.last_chat, room_chat.user_id, '
+      query += 'room_chat.friend_id, user.user_id, '
+      query += 'user.user_name '
+      query += 'FROM room_chat INNER JOIN user ON room_chat.friend_id = user.user_id WHERE room_chat.user_id = ?;'
+      db.all(query, [id], (error, result) => {
+        !error ? resolve(result) : reject(new Error(error))
+      })
     })
   },
   sendInvitation: (data) => {
@@ -138,8 +153,9 @@ module.exports = {
   },
   getContactDataOnly: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM contact WHERE contact.contact_user_id = ${id} OR contact_friend_id = ${id}`,
+      db.all(
+        'SELECT * FROM contact WHERE contact.contact_user_id = ? OR contact_friend_id = ?',
+        [id],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(error))
         }
@@ -182,11 +198,11 @@ module.exports = {
       )
     })
   },
-  getPendingRequest: (condition) => {
+  getPendingRequest: (id) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        'SELECT * FROM friend_request WHERE ?',
-        condition,
+      db.all(
+        'SELECT * FROM friend_request WHERE contact_friend_id = ?',
+        [id],
         (error, result) => {
           console.log(error)
           !error ? resolve(result) : reject(new Error(error))

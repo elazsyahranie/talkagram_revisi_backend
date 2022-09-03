@@ -16,6 +16,7 @@ const {
   getContactPagination,
   createRoom,
   getRoomList,
+  getRoomsByUserId,
   changeUserVerification,
   updateUser,
   updateUserPassword,
@@ -54,6 +55,7 @@ Route.post(
   createRoom
 )
 Route.get('/get-room-list/:id', authentication, getRoomList)
+Route.get('/get-rooms-by-user-id/:id', authentication, getRoomsByUserId)
 Route.get('/verify-user/:token', changeUserVerification)
 Route.patch(
   '/:id',

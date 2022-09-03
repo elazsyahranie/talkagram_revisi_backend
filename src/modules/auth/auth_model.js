@@ -1,3 +1,4 @@
+const db = require('../../config/mysql')
 const connection = require('../../config/mysql')
 
 module.exports = {
@@ -60,9 +61,9 @@ module.exports = {
       })
     })
   },
-  getDataConditions: (data) => {
+  getUserDataByEmail: (data) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT * FROM user WHERE ?', data, (error, result) => {
+      db.all('SELECT * FROM user WHERE user_email = ?', [data], (error, result) => {
         !error ? resolve(result) : reject(new Error(error))
       })
     })

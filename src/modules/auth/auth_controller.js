@@ -59,9 +59,7 @@ module.exports = {
   login: async (req, res) => {
     try {
       const { userEmail, userPassword } = req.body
-      const checkUserEmail = await authModel.getDataConditions({
-        user_email: userEmail
-      })
+      const checkUserEmail = await authModel.getUserDataByEmail(userEmail)
 
       if (checkUserEmail.length > 0) {
         if (checkUserEmail[0].user_verification === 0) {
@@ -99,6 +97,7 @@ module.exports = {
         return helper.response(res, 404, 'Email not registered')
       }
     } catch (error) {
+      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },

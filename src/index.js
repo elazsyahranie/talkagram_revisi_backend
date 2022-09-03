@@ -81,6 +81,7 @@ io.on('connection', (socket) => {
       socket.leave(data.previousRoom)
     }
     socket.join(data.room)
+    console.log(data)
     // socket.broadcast.to(data.room).emit('chatMessage', {
     //   user_name: 'BOT',
     //   message: `${data.user_name} joined chat!`

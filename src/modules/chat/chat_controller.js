@@ -5,14 +5,9 @@ module.exports = {
   insertMessage: async (req, res) => {
     try {
       const { roomChat, senderId, receiverId, chatMessage } = req.body
-      const setData = {
-        room_chat: roomChat,
-        sender_id: senderId,
-        receiver_id: receiverId,
-        message: chatMessage
-      }
-      const result = await chatModel.recordMessage(setData)
-      return helper.response(res, 200, 'Chat message recorded!', result)
+      const result = await chatModel.recordMessage(roomChat, senderId, receiverId, chatMessage)
+      const result2 = await chatModel.recordLastmessage(chatMessage)
+      return helper.response(res, 200, 'Chat message recorded!', result, result2)
     } catch (error) {
       console.log(error)
       return helper.response(res, 400, 'Bad request', error)

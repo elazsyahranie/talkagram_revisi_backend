@@ -1,27 +1,43 @@
+const db = require('../../config/mysql')
 const connection = require('../../config/mysql')
 
 module.exports = {
-  recordMessage: (data) => {
+  recordMessage: (
+    room_chat, 
+    sender_id, 
+    receiver_id, 
+    message
+  ) => {
     return new Promise((resolve, reject) => {
-      connection.query('INSERT INTO chat SET ?', data, (error, result) => {
-        console.log(error)
-        if (!error) {
-          const newResult = {
-            id: result.insertId,
-            ...data
-          }
-          resolve(newResult)
-        } else {
-          reject(new Error(result))
-        }
+      let query = 'INSERT INTO chat '
+      query += '(room_chat, sender_id, receiver_id, message) ' 
+      query += 'VALUES (?, ?, ?, ?)'
+      db.run(query, [
+        room_chat, 
+        sender_id,
+        receiver_id, 
+        message
+      ], (error) => {
+        !error ? resolve () : reject(new Error(error))
+      })
+    })
+  },
+  recordLastmessage: (message) => {
+    return new Promise((resolve, reject) => {
+      let query = 'INSERT INTO room_chat '
+      query += '(last_chat) ' 
+      query += 'VALUES (?)'
+      db.run(query, [message], (error) => {
+        !error ? resolve () : reject(new Error(error))
       })
     })
   },
   // SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id WHERE room_chat.user_id = ${id}
   getChatRecords: (room) => {
     return new Promise((resolve, reject) => {
-      connection.query(
-        `SELECT * FROM chat JOIN user ON chat.sender_id = user.user_id WHERE chat.room_chat = ${room}`,
+      db.all(
+        'SELECT * FROM chat JOIN user ON chat.sender_id = user.user_id WHERE chat.room_chat = ?',
+        [room],
         (error, result) => {
           console.log(result)
           !error ? resolve(result) : reject(new Error(error))

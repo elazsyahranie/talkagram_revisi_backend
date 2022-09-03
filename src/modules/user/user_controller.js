@@ -100,7 +100,6 @@ module.exports = {
         result2
       )
     } catch (error) {
-      console.log(error)
       return helper.response(res, 400, 'Bad Request', error)
     }
   },
@@ -108,6 +107,15 @@ module.exports = {
     try {
       const { id } = req.params
       const result = await userModel.findRoomList(id)
+      return helper.response(res, 200, 'Succesfully get list of rooms!', result)
+    } catch (error) {
+      return helper.response(res, 400, 'Bad request', error)
+    }
+  },
+  getRoomsByUserId: async (req, res) => {
+    try {
+      const { id } = req.params 
+      const result = await userModel.findRoomListByUserId(id)
       return helper.response(res, 200, 'Succesfully get list of rooms!', result)
     } catch (error) {
       console.log(error)
@@ -147,9 +155,7 @@ module.exports = {
   getPendingRequestData: async (req, res) => {
     try {
       const { id } = req.params
-      const result = await userModel.getPendingRequest({
-        contact_friend_id: id
-      })
+      const result = await userModel.getPendingRequest(id)
       if (result) {
         return helper.response(res, 200, 'Pending request available', result)
       } else {
