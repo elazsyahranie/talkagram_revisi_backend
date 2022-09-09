@@ -22,12 +22,14 @@ module.exports = {
       })
     })
   },
-  recordLastmessage: (message) => {
+  // UPDATE room_chat SET last_chat = 'Hi!' WHERE room_chat = 926
+  recordLastmessage: (message, room_chat) => {
     return new Promise((resolve, reject) => {
-      let query = 'INSERT INTO room_chat '
-      query += '(last_chat) ' 
-      query += 'VALUES (?)'
-      db.run(query, [message], (error) => {
+      let query = 'UPDATE room_chat '
+      query += 'SET last_chat = ? ' 
+      query += 'WHERE room_chat = ?'
+      db.run(query, [message, room_chat], (error) => {
+        console.log(error)
         !error ? resolve () : reject(new Error(error))
       })
     })

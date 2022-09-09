@@ -6,7 +6,7 @@ module.exports = {
     try {
       const { roomChat, senderId, receiverId, chatMessage } = req.body
       const result = await chatModel.recordMessage(roomChat, senderId, receiverId, chatMessage)
-      const result2 = await chatModel.recordLastmessage(chatMessage)
+      const result2 = await chatModel.recordLastmessage(roomChat, chatMessage)
       return helper.response(res, 200, 'Chat message recorded!', result, result2)
     } catch (error) {
       console.log(error)

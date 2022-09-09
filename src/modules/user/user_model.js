@@ -35,10 +35,18 @@ module.exports = {
     })
   },
   // SELECT * FROM user JOIN balance ON user.user_id = balance.user_id WHERE user.user_id = ${id}
+  // 'SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id JOIN last_chat ON room_chat.room_chat = last_chat.room_chat WHERE room_chat.user_id = ?;'
   findRoomList: (id) => {
     return new Promise((resolve, reject) => {
+      let query = 'SELECT '
+      query += 'room_chat.room_chat, room_chat.room_chat_id, '
+      query += 'room_chat.last_chat, room_chat.user_id, '
+      query += 'room_chat.friend_id, user.user_id, user.user_name '
+      query += 'FROM room_chat '
+      query += 'INNER JOIN user ON room_chat.friend_id = user.user_id '
+      query += 'WHERE room_chat.user_id = ?'
       db.all(
-        'SELECT * FROM room_chat JOIN user ON room_chat.friend_id = user.user_id JOIN last_chat ON room_chat.room_chat = last_chat.room_chat WHERE room_chat.user_id = ?;',
+        query,
         [id],
         (error, result) => {
           !error ? resolve(result) : reject(new Error(result))
