@@ -9,18 +9,45 @@ module.exports = {
     message
   ) => {
     return new Promise((resolve, reject) => {
-      let query = 'INSERT INTO chat '
-      query += '(room_chat, sender_id, receiver_id, message) ' 
-      query += 'VALUES (?, ?, ?, ?)'
-      db.run(query, [
-        room_chat, 
-        sender_id,
-        receiver_id, 
-        message
-      ], (error) => {
-        !error ? resolve () : reject(new Error(error))
+      db.beginTransaction((err, transaction) => {
+        let insertQuery = 'INSERT INTO chat '
+        insertQuery += '(room_chat, sender_id, receiver_id, message) ' 
+        insertQuery += 'VALUES (?, ?, ?, ?)'
+  
+        let updateQuery = 'UPDATE room_chat ' 
+        updateQuery = 'SET last_chat = ? ' 
+        updateQuery = 'WHERE room_chat = ?'
+        
+        transaction.run(insertQuery, [
+          room_chat, 
+          sender_id,
+          receiver_id, 
+          message
+        ])
+        
+        transaction.run(updateQuery, [
+          message, 
+          room_chat  
+        ])
+  
+        transaction.commit((error) => {
+          !error ? resolve () : reject(new Error(error))
+        })
       })
     })
+    // return new Promise((resolve, reject) => {
+    //   let query = 'INSERT INTO chat '
+    //   query += '(room_chat, sender_id, receiver_id, message) ' 
+    //   query += 'VALUES (?, ?, ?, ?)'
+    //   db.run(query, [
+    //     room_chat, 
+    //     sender_id,
+    //     receiver_id, 
+    //     message
+    //   ], (error) => {
+    //     !error ? resolve () : reject(new Error(error))
+    //   })
+    // })
   },
   // UPDATE room_chat SET last_chat = 'Hi!' WHERE room_chat = 926
   recordLastmessage: (message, room_chat) => {
